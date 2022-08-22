@@ -28,7 +28,7 @@ async function makeRelease() {
       .split("\n")
       .map((log) => log.replace(/"/g, ""))
       .join("\n");
-      
+
     const bodyText = JSON.stringify({
       summary: getTitle(
         `0.0.${newReleaseNumber}`,
@@ -57,16 +57,13 @@ async function makeRelease() {
       throw new Error("fail build docker image");
     }
 
-    await fetch(
-      `${BASE_URL}/${TICKET_ID}/comments`,
-      {
-        method: "POST",
-        headers: getHeaders(OAUTH_TOKEN, ORG_ID),
-        body: JSON.stringify({
-          text: getComment(`rc-0.0.${newReleaseNumber}`),
-        }),
-      }
-    );
+    await fetch(`${BASE_URL}/${TICKET_ID}/comments`, {
+      method: "POST",
+      headers: getHeaders(OAUTH_TOKEN, ORG_ID),
+      body: JSON.stringify({
+        text: getComment(`rc-0.0.${newReleaseNumber}`),
+      }),
+    });
   } catch (error) {
     core.setFailed(error.message);
   }
