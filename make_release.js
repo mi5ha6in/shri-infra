@@ -40,11 +40,13 @@ async function makeRelease() {
       ),
     });
 
+    console.log("Пошел запрос на изменения тикета");
     await fetch(URL_TICKET, {
       method: "PATCH",
       headers: getHeaders(OAUTH_TOKEN, ORG_ID),
       body: bodyText,
     });
+    console.log("Запрос на изменения тикета завершен");
 
     const dockerCodeExec = await exec.exec("docker", [
       "build",
@@ -57,6 +59,7 @@ async function makeRelease() {
       throw new Error("fail build docker image");
     }
 
+    console.log("Пошел запрос на добавление комментария");
     await fetch(`${BASE_URL}/${TICKET_ID}/comments`, {
       method: "POST",
       headers: getHeaders(OAUTH_TOKEN, ORG_ID),
@@ -64,6 +67,7 @@ async function makeRelease() {
         text: getComment(`rc-0.0.${newReleaseNumber}`),
       }),
     });
+    console.log("Запрос на добавление комментария завершен");
   } catch (error) {
     core.setFailed(error.message);
   }
@@ -90,16 +94,24 @@ async function getResultCommand(command, args) {
     throw new Error(resultError);
   }
 
+  console.log("ResultCommand: " + result);
+
   return result;
 }
 
 function getReleaseNumber(currentTag) {
   const tagInfo = currentTag.split("-");
   const tagNumber = tagInfo[tagInfo.length - 1].split(".");
+  console.log(
+    "Получили текущий номер тега: " + tagNumber[tagNumber.length - 1]
+  );
   return tagNumber[tagNumber.length - 1];
 }
 
 function getOldReleaseNumber(currentReleaseNumber) {
+  console.log(
+    "Получили прошлый номер тега: " + Number(currentReleaseNumber) - 1
+  );
   return Number(currentReleaseNumber) - 1;
 }
 
@@ -111,13 +123,18 @@ function getHeaders(oauthToken, orgId) {
 }
 
 function getDescriptions(authorName, commits) {
+  console.log(
+    `Ответственный за релиз ${authorName}\n\nКоммиты, попавшие в релиз:\n${commits}`
+  );
   return `Ответственный за релиз ${authorName}\n\nКоммиты, попавшие в релиз:\n${commits}`;
 }
 
 function getTitle(releaseNumber, date) {
+  console.log(`Релиз №${releaseNumber} от ${date}`);
   return `Релиз №${releaseNumber} от ${date}`;
 }
 
 function getComment(releaseTag) {
+  console.log(`Собрали образ с тегом ${releaseTag}`);
   return `Собрали образ с тегом ${releaseTag}`;
 }
