@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@actions/core": "^1.9.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^5.0.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -10,9 +13,11 @@
     "@types/node": "^16.11.48",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "node-fetch": "^2.6.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "serve": "^14.0.1",
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4"
   },
@@ -22,7 +27,8 @@
     "lint": "./node_modules/.bin/eslint .",
     "ts": "./node_modules/.bin/tsc",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve": "serve -s build"
   },
   "eslintConfig": {
     "extends": [
