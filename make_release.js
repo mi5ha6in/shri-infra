@@ -16,7 +16,7 @@ async function makeRelease() {
     const releases =
       Number(newReleaseNumber) === 1
         ? `rc-0.0.${newReleaseNumber}`
-        : `rc-0.0.${newReleaseNumber}–rc-0.0.${oldReleaseNumber}`;
+        : `rc-0.0.${newReleaseNumber}...rc-0.0.${oldReleaseNumber}`;
 
     const logForCommit = await getResultCommand("git", [
       "log",
